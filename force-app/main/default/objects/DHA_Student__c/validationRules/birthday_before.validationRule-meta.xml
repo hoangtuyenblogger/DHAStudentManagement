@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>birthday_before</fullName>
+    <active>false</active>
+    <description>Student birthdate should be 6 years before the current date</description>
+    <errorConditionFormula>(TODAY() - Birthday__c)  &gt;  6</errorConditionFormula>
+    <errorMessage>This student age is not enough to attend our classes.</errorMessage>
+</ValidationRule>

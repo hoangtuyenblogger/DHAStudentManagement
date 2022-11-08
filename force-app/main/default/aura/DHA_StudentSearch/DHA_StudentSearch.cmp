@@ -1,0 +1,92 @@
+<aura:component controller="DHA_Controller" implements="force:appHostable">
+
+  <!-- load Name of DHA_Class__c -->
+  <aura:attribute name="classes" type="DHA_Class__c[]" />
+  <aura:handler name="init" value="{!this}" action="{!c.doInit}" />
+
+  <!-- attributes for datatable  -->
+  <aura:attribute name="data" type="Object" />
+  <aura:attribute name="dataGlobal" type="Object" />
+  <aura:attribute name="columns" type="List" />
+  <aura:attribute name="sortDirection" type="String" default="asc" />
+  <aura:attribute name="sortedBy" type="String"/>
+  <!-- attributes search form  -->
+  <aura:attribute name="studentName" type="String" />
+  <aura:attribute name="birthday" type="date" />
+  <aura:attribute name="className" type="String" />
+  <!-- attribute loaded Spiner -->
+  <aura:attribute name="loaded" type="Boolean" default="false" />
+
+  <!-- attribute model show details -->
+  <aura:attribute name="studentId" type="String"/>
+  <aura:attribute name="isModalOpen" type="Boolean" default="false"/>  
+
+
+  <!-- =================================================================================================================== -->
+  <!-- BOXED AREA -->
+  <fieldset class="slds-box slds-theme_default">
+    <form>
+      <!--Spiner -->
+      <aura:if isTrue="{! v.loaded }">
+        <lightning:spinner  size="small" variant="brand" />
+      </aura:if>
+      <!-- end Spiner -->
+
+      <div class="slds-text-heading_large">Search condition</div>
+
+      <!-- grid -->
+      <div class="slds-grid slds-gutters">
+        <!-- load Name of DHA_Class__c -->
+        <div class="slds-col">
+          <!-- input Name -->
+          <lightning:input type="search" aura:id="field" label="Student Name" value="{! v.studentName}" />
+
+          <!-- Dropdown Name of DHA_Class__c  -->
+          <lightning:select aura:id="field" value="{! v.className}" label="Class">
+            <option value="">-- None --</option>
+            <aura:iteration items="{!v.classes}" var="item">
+              <option value="{!item.Name}" text="{!item.Name}"></option>
+            </aura:iteration>
+          </lightning:select>
+        </div>
+        <!-- col 2 -->
+        <div class="slds-col">
+          <lightning:input type="date" aura:id="birthdayField" label="Birthday" dateStyle="short"
+            value="{! v.birthday}" />
+        </div>
+
+        <!-- col 3 -->
+        <div class="slds-col">
+          <span></span>
+        </div>
+      </div>
+      <!-- button -->
+      <div class="slds-align_absolute-center">
+        <lightning:button label="Search" variant="brand" onclick="{! c.click_search}" />
+        <lightning:button label="Clear Condition" iconName="utility:clear" iconPosition="left"
+          onclick="{!c.clear_condition}" />
+      </div>
+    </form>
+  </fieldset>
+
+
+  <!-- =================================================================================================================== -->
+  <!-- Imports -->
+  <!-- datatable -->
+    <lightning:datatable  keyField="id" 
+    data="{! v.data }" 
+    columns="{! v.columns }" 
+    hideCheckboxColumn="true"
+    showRowNumberColumn="true"
+    sortedDirection="{!v.sortDirection}"
+    defaultSortDirection="{!v.defaultSortDirection}"
+    sortedBy="{!v.sortedBy}"
+    onsort="{!c.handleSort}" 
+    onrowaction="{! c.handleRowAction }"
+    />
+
+  <!-- show details ...   -->
+  <aura:if isTrue="{! v.isModalOpen}">
+    <c:DHA_StudentSearchDetailModal isShowModel="{! v.isModalOpen }" studentId="{! v.studentId}" />
+  </aura:if>
+  </aura:component>

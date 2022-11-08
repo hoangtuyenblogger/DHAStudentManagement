@@ -1,0 +1,169 @@
+<aura:component controller="DHA_Controller" implements="force:appHostable">
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}" />
+    <aura:attribute name="isShowModel" type="Boolean" default="true" />
+    <!-- attribute expand -->
+    <aura:attribute name="isexpanded_studentInfo" type="Boolean" default="true" />
+    <aura:attribute name="isexpanded_studyResult" type="Boolean" default="true" />
+    <aura:attribute name="studentId" type="String" default="a0A5i000002WeiuEAC" />
+    <aura:attribute name="studentInfo" type="DHA_Student__c[]"  />
+    <aura:attribute name="studyResult" type="SObject" />
+    <!-- <aura:attribute name="dataTable_studyResult" type="DHA_Student__c[]"  /> -->
+    
+    <!-- attribute dataTable -->
+    <aura:attribute name="idRow" type="List" />
+    <aura:attribute name="data" type="Object" />
+    <aura:attribute name="columns" type="List" />
+    <aura:attribute name="studentResultInfo" type="Object"  />
+    
+<aura:if isTrue="{! v.isShowModel}">
+    <section role="dialog" tabindex="-1"  aria-modal="false" aria-labelledby="modal-heading-01" class="slds-modal slds-fade-in-open slds-modal_medium">
+        <div class="slds-modal__container">
+            <button   class="slds-button slds-button_icon slds-modal__close slds-button_icon-inverse" >
+                    <lightning:buttonIcon iconName="utility:close" 
+                        variant="border-inverse" 
+                        title="Close" 
+                        alternativeText="Close modal"
+                        onclick="{! c.closeModel }" />
+                
+                <span class="slds-assistive-text">Cancel and close</span>
+            </button>
+
+            <div class="slds-modal__header">
+                <h1 id="modal-heading-01" class="slds-modal__title slds-hyphenate" tabindex="-1">Student Details</h1>
+            </div>
+
+
+            <!-- Start Footless -->
+            <div class="slds-modal__content slds-p-around_medium" id="modal-content-id-1">
+
+                <!-- Start Student Infomation expand -->
+                <div class="{! 'slds-section' + (v.isexpanded_studentInfo ? ' slds-is-open' : '')}">
+                    <!-- button -->
+                    <h3 class="slds-section__title slds-theme_shade">
+                        <button aria-controls="divContent" aria-expanded="{!v.isexpanded_studentInfo}" onclick="{!c.changeState_studentInfo}" class="slds-button slds-section__title-action">
+                            <lightning:icon aura:id="articleOne" iconName="utility:switch" size="xx-small" alternativeText="switch" />
+                            <span class="slds-truncate" title="Section Title">Student Infomation</span>
+                        </button>
+                    </h3>
+
+                    <!-- content -->
+                    <div class="slds-section__content" aria-hidden="{!!v.isexpanded_studentInfo}" id="divContent">
+                                        <div class="slds-grid slds-gutters">
+                                    
+                                            <div class="slds-col  ">
+                                                <p class="slds-p-around_medium">DHA Student Name </p>
+                                                <p class="slds-p-around_medium">Birthday</p>
+                                                <p class="slds-p-around_medium">Gender</p>
+                                                <p class="slds-p-around_medium">Address</p>
+                                            </div>
+
+                                            <div class="slds-col  ">
+                                                <p class="slds-p-around_medium">
+                                                    <span>{! v.studentInfo[0].Name }</span>
+                                                </p>
+                                                <p class="slds-p-around_medium">
+                                                    <span>{! v.studentInfo[0].Birthday__c }</span>
+                                                </p>
+                                                <p class="slds-p-around_medium">
+                                                    <span>{! v.studentInfo[0].Gender__c }</span>
+                                                </p>
+                                                <p class="slds-p-around_medium">
+                                                    <span>{! v.studentInfo[0].Address__c }</span>
+                                                </p>
+                                            </div>
+                                    
+                                            <div class="slds-col">
+                                                <p class="slds-p-around_medium">Student Code</p>
+                                                <p class="slds-p-around_medium">Age</p>
+                                                <p class="slds-p-around_medium">Email</p>
+                                            </div>
+                                    
+                                            <div class="slds-col">
+                                                <p class="slds-p-around_medium">
+                                                    <span>{! v.studentInfo[0].Student_code__c }</span> 
+                                                </p>
+                                                <p class="slds-p-around_medium">
+                                                    <span>{! v.studentInfo[0].Age__c }</span>
+                                                </p>
+                                                <p class="slds-p-around_medium">
+                                                    <span>{! v.studentInfo[0].Email__c }</span>
+                                                </p>
+                                            </div>
+                                        </div>
+                    </div>
+                </div>
+                <!--  End Student Infomation expand  -->
+
+
+                <!-- Start Study Result Infomation expand -->
+                <div class="{! 'slds-section' + (v.isexpanded_studyResult ? ' slds-is-open' : '')}">
+                    <!-- button -->
+                    <h3 class="slds-section__title slds-theme_shade">
+                        <button aria-controls="divContent" aria-expanded="{!v.isexpanded_studyResult}" onclick="{!c.changeState_studyResult}" class="slds-button slds-section__title-action">
+                            <lightning:icon aura:id="articleOne" iconName="utility:switch" size="xx-small" alternativeText="switch" />
+                            <span class="slds-truncate" title="Section Title">Study Result Infomation</span>
+                        </button>
+                    </h3>
+
+                    <!-- content -->
+                    <div class="slds-section__content" aria-hidden="{!!v.isexpanded_studyResult}" id="divContent">
+                        <div class="slds-grid slds-gutters">
+                            <!-- col 1 -->
+                            <div class="slds-col">
+                                <p class="slds-p-around_medium">Assigned Classes</p>
+                                <p class="slds-p-around_medium">Average Final Score</p>
+                            </div>
+                            <div class="slds-col">
+                                <p class="slds-p-around_medium">{! v.studyResult[0]}</p>
+                                <p class="slds-p-around_medium">{! v.studyResult[2]}</p>
+                            </div>
+
+                            <!-- col 2 studyResult -->
+                            <div class="slds-col">
+                                <p class="slds-p-around_medium">Classes Have Final Score</p>
+                            </div>
+                            <div class="slds-col">
+                                <p class="slds-p-around_medium">{! v.studyResult[1]}</p>
+                            </div>
+
+
+                        </div>
+
+                        <!-- datatable -->
+                        <lightning:datatable  keyField="id" 
+                        data="{! v.studyResult[3] }" 
+                        columns="{! v.columns }" 
+                        hideCheckboxColumn="true"
+                        showRowNumberColumn="true"
+                        />
+
+                    </div>
+                </div>
+                <!--  End Study Result Infomation expand  -->
+
+                
+            </div>
+            <!-- End Footless -->
+        </div>
+    </section>
+    <div class="slds-backdrop slds-backdrop_open" role="presentation"></div>
+    
+</aura:if>
+</aura:component>
+
+
+
+
+<!-- <div class="slds-col  ">
+    <p class="slds-p-around_medium">DHA Student Name </p>
+    <p class="slds-p-around_medium">Birthday</p>
+    <p class="slds-p-around_medium">Gender</p>
+    <p class="slds-p-around_medium">Address</p>
+</div>
+
+
+<div class="slds-col">
+    <p class="slds-p-around_medium">Student Code</p>
+    <p class="slds-p-around_medium">Age</p>
+    <p class="slds-p-around_medium">Email</p>
+</div> -->
